@@ -37,6 +37,12 @@ router.get("/match", async (ctx) => {
     const data = await match(id, server).then((res) => {
       return res;
     });
+    // 反代
+    const proxy = process.env.PROXY_URL;
+    console.log(proxy);
+    if (proxy) {
+      data.proxyUrl = proxy + data.url.replace(/^http:\/\//, "http/");
+    }
     ctx.body = {
       code: 200,
       message: "匹配成功",
